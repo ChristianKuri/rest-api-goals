@@ -1,12 +1,14 @@
+const asyncHandler = require('express-async-handler')
+
 /**
  * @desc Get all goals
  * @route GET /api/goals
  * @access Public
  * @returns {object} Goals
  */
-const getGoals = (req, res) => {
+const getGoals = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Get Goals' })
-}
+})
 
 /**
  * @desc Get a goal by id
@@ -14,19 +16,24 @@ const getGoals = (req, res) => {
  * @access Public
  * @returns {object} Goal
  */
-const getGoal = (req, res) => {
+const getGoal = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `Get Goal ${req.params.id}` })
-}
+})
 
 /**
- * @desc Add a goal
+ * @desc Create a goal
  * @route POST /api/goals
  * @access Public
  * @returns {object} Goal
  */
-const addGoal = (req, res) => {
-  res.status(200).json({ message: 'Add Goal' })
-}
+const createGoal = asyncHandler(async (req, res) => {
+  if (!req.body.goal) {
+    res.status(400)
+    throw new Error('Goal is required')
+  }
+
+  res.status(200).json({ message: 'Create Goal' })
+})
 
 /**
  * @desc Update a goal
@@ -34,9 +41,9 @@ const addGoal = (req, res) => {
  * @access Public
  * @returns {object} Goal
  */
-const updateGoal = (req, res) => {
+const updateGoal = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `Update Goal ${req.params.id}` })
-}
+})
 
 /**
  * @desc Delete a goal
@@ -44,14 +51,14 @@ const updateGoal = (req, res) => {
  * @access Public
  * @returns {object} Goal
  */
-const deleteGoal = (req, res) => {
+const deleteGoal = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `Delete Goal ${req.params.id}` })
-}
+})
 
 module.exports = {
   getGoals,
   getGoal,
-  addGoal,
+  createGoal,
   updateGoal,
   deleteGoal,
 }
