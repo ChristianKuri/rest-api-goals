@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
+const Goal = require('../models/goalModel')
+
 /**
  * @desc Get all goals
  * @route GET /api/goals
@@ -7,17 +9,9 @@ const asyncHandler = require('express-async-handler')
  * @returns {object} Goals
  */
 const getGoals = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: 'Get Goals' })
-})
+  const goals = await Goal.find()
 
-/**
- * @desc Get a goal by id
- * @route GET /api/goals/:id
- * @access Public
- * @returns {object} Goal
- */
-const getGoal = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Get Goal ${req.params.id}` })
+  res.status(200).json(goals)
 })
 
 /**
@@ -27,12 +21,28 @@ const getGoal = asyncHandler(async (req, res) => {
  * @returns {object} Goal
  */
 const createGoal = asyncHandler(async (req, res) => {
-  if (!req.body.goal) {
+  if (!req.body.name) {
     res.status(400)
-    throw new Error('Goal is required')
+    throw new Error('Goal Name is required')
   }
 
-  res.status(200).json({ message: 'Create Goal' })
+  const goal = await Goal.create({
+    name: req.body.name,
+  })
+
+  res.status(201).json(goal)
+})
+
+/**
+ * @desc Get a goal by id
+ * @route GET /api/goals/:id
+ * @access Public
+ * @returns {object} Goal
+ */
+const readGoal = asyncHandler(async (req, res) => {
+  const goal = await Goal.findById(req.params.id)
+
+  res.status(200).json(goal)
 })
 
 /**
@@ -42,7 +52,25 @@ const createGoal = asyncHandler(async (req, res) => {
  * @returns {object} Goal
  */
 const updateGoal = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Update Goal ${req.params.id}` })
+  const goal = await Goal.findById(req.params.id)
+
+  if (!goal) {
+    res.status(400)
+    throw new Error('Goal not found')
+  }
+
+  if (!req.body.name) {
+    res.status(400)
+    throw new Error('Goal Name is required')
+  }
+
+  const updatedGoal = await Goal.findByIdAndUpdate(
+    req.params.id,
+    { name: req.body.name },
+    { new: true }
+  )
+
+  res.status(200).json(updatedGoal)
 })
 
 /**
@@ -52,12 +80,21 @@ const updateGoal = asyncHandler(async (req, res) => {
  * @returns {object} Goal
  */
 const deleteGoal = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: `Delete Goal ${req.params.id}` })
+  const goal = await Goal.findById(req.params.id)
+
+  if (!goal) {
+    res.status(400)
+    throw new Error('Goal not found')
+  }
+
+  await goal.delete()
+
+  res.status(200).json({ id: req.params.id })
 })
 
 module.exports = {
   getGoals,
-  getGoal,
+  readGoal,
   createGoal,
   updateGoal,
   deleteGoal,
