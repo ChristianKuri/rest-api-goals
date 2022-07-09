@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 
-const goalSchema = new mongoose.Schema(
+const { Schema, model } = mongoose
+
+const goalSchema = new Schema(
   {
     name: {
       type: String,
@@ -13,4 +15,4 @@ const goalSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.model('Goal', goalSchema)
+export default model('Goal', goalSchema)
