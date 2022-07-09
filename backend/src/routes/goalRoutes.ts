@@ -1,12 +1,14 @@
-const express = require('express')
+import express from 'express'
+
 const router = express.Router()
-const {
+
+import {
   getGoals,
-  readGoal,
   createGoal,
+  readGoal,
   updateGoal,
   deleteGoal,
-} = require('../controller/goalController')
+} from '../controller/goalController'
 
 router.get('/', getGoals)
 router.post('/', createGoal)
@@ -14,4 +16,4 @@ router.get('/:id', readGoal)
 router.put('/:id', updateGoal)
 router.delete('/:id', deleteGoal)
 
-module.exports = router
+export default router

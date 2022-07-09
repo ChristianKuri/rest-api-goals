@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 const goalSchema = new mongoose.Schema(
   {
@@ -13,4 +13,4 @@ const goalSchema = new mongoose.Schema(
   }
 )
 
-module.exports = mongoose.model('Goal', goalSchema)
+export default mongoose.model('Goal', goalSchema)
